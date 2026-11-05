@@ -11,7 +11,9 @@ internal sealed class Sandbox : IDisposable
 {
     public Sandbox()
     {
-        Root = Path.Combine(Path.GetTempPath(), "memshare-tests", Guid.NewGuid().ToString("N"));
+        // The real path: on macOS the temporary directory is under /var, a symlink to /private/var, and
+        // git reports resolved paths.
+        Root = Path.Combine(RealPath(Path.GetTempPath()), "memshare-tests", Guid.NewGuid().ToString("N"));
         Home = System.IO.Directory.CreateDirectory(Path.Combine(Root, "home")).FullName;
         var gitConfig = Path.Combine(Root, "gitconfig");
         File.WriteAllText(gitConfig, """
@@ -52,6 +54,23 @@ internal sealed class Sandbox : IDisposable
         var result = await Git.RunAsync(directory, arguments);
         Assert.True(result.Succeeded, $"git {string.Join(' ', arguments)} failed: {result.StandardError}");
         return result;
+    }
+
+    /// <summary>A directory's path with every symbolic link along it resolved.</summary>
+    private static string RealPath(string directory)
+    {
+        var full = Path.GetFullPath(directory);
+        var current = Path.GetPathRoot(full)!;
+        foreach (var part in full[current.Length..].Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries))
+        {
+            current = Path.Combine(current, part);
+            if (new DirectoryInfo(current).ResolveLinkTarget(returnFinalTarget: true) is { } target)
+            {
+                current = target.FullName;
+            }
+        }
+
+        return current;
     }
 
     public void Dispose()
