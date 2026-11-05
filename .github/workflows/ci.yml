@@ -25,8 +25,8 @@ jobs:
         os: ${{ github.server_url == 'https://github.com' && fromJSON('["ubuntu-latest","windows-latest","macos-latest"]') || fromJSON('["ubuntu-latest"]') }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           global-json-file: global.json
       - run: dotnet restore
@@ -42,8 +42,8 @@ jobs:
         include: ${{ github.server_url == 'https://github.com' && fromJSON('[{"os":"ubuntu-22.04","rid":"linux-x64"},{"os":"windows-latest","rid":"win-x64"},{"os":"macos-latest","rid":"osx-arm64"}]') || fromJSON('[{"os":"ubuntu-latest","rid":"linux-x64"}]') }}
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           global-json-file: global.json
       - name: Native toolchain on Linux (clang and zlib, as Native AOT documents)
