@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The memshare executable: commands, the session-start hook, the merge driver (ADR-0003). -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>memshare</AssemblyName>
+    <RootNamespace>Memshare.Cli</RootNamespace>
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+    <!-- Smaller binary: no event source, short framework messages; stack traces kept for bug reports. -->
+    <StackTraceSupport>true</StackTraceSupport>
+    <EventSourceSupport>false</EventSourceSupport>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Memshare.Core\Memshare.Core.csproj" />
+  </ItemGroup>
+
+</Project>

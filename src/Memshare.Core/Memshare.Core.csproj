@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Configuration, stores, Git, links: everything except the command line. -->
+  <PropertyGroup>
+    <RootNamespace>Memshare</RootNamespace>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Memshare.Tests" />
+  </ItemGroup>
+
+  <!-- The agent skills, versioned with the tool and installed by `memshare install` (ADR-0007). -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\skills\**\SKILL.md" LogicalName="skills/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Memshare.Merge\Memshare.Merge.csproj" />
+  </ItemGroup>
+
+</Project>

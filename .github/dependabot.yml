@@ -1,0 +1,18 @@
+# Weekly update pull requests for the NuGet packages and the pinned GitHub Actions, grouped to keep
+# the noise low. Security updates come as soon as an advisory is published.
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      nuget:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

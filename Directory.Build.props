@@ -1,0 +1,33 @@
+<Project>
+  <!-- Settings shared by every project. Project-specific settings belong in the .csproj files. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Code quality: warnings fail the build (trim and AOT warnings included), analyzers run during build. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- CS1591: missing XML comment. Public API docs are encouraged, not enforced. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- The tool is in English only: no culture data in the binary, culture-independent formatting. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true' or '$(GITHUB_ACTIONS)' == 'true' or '$(GITEA_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>moderate</NuGetAuditLevel>
+
+    <Product>agent-memshare</Product>
+    <Version>0.1.0</Version>
+    <Authors>George Christodoulides</Authors>
+    <Copyright>Copyright (c) 2026 George Christodoulides</Copyright>
+  </PropertyGroup>
+</Project>

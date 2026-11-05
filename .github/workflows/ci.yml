@@ -1,0 +1,58 @@
+# Build, tests and format check on every push and pull request, then a Native AOT build of the
+# executable with a smoke test. Runs on Gitea Actions (Linux only) and on GitHub Actions (Linux,
+# Windows and macOS). Actions are pinned by commit SHA (a tag can be moved to other code; the
+# version is in the comment).
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Read-only token: CI never writes to the repository.
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+
+jobs:
+  build-and-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ github.server_url == 'https://github.com' && fromJSON('["ubuntu-latest","windows-latest","macos-latest"]') || fromJSON('["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+        with:
+          global-json-file: global.json
+      - run: dotnet restore
+      - run: dotnet build --no-restore --configuration Release
+      - run: dotnet test --no-build --configuration Release
+      - run: dotnet format --verify-no-changes --no-restore
+        if: runner.os == 'Linux'
+
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ github.server_url == 'https://github.com' && fromJSON('[{"os":"ubuntu-22.04","rid":"linux-x64"},{"os":"windows-latest","rid":"win-x64"},{"os":"macos-latest","rid":"osx-arm64"}]') || fromJSON('[{"os":"ubuntu-latest","rid":"linux-x64"}]') }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+        with:
+          global-json-file: global.json
+      - name: Native toolchain on Linux (clang and zlib, as Native AOT documents)
+        if: runner.os == 'Linux'
+        run: |
+          command -v clang >/dev/null || { $(command -v sudo) apt-get update -qq && $(command -v sudo) apt-get install -y -qq clang zlib1g-dev >/dev/null; }
+      - run: dotnet publish src/Memshare.Cli --configuration Release --runtime ${{ matrix.rid }} --output artifacts/${{ matrix.rid }}
+      - name: Smoke test
+        shell: bash
+        run: |
+          ./artifacts/${{ matrix.rid }}/memshare --version
+          ./artifacts/${{ matrix.rid }}/memshare status

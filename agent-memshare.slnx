@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Memshare.Cli/Memshare.Cli.csproj" />
+    <Project Path="src/Memshare.Core/Memshare.Core.csproj" />
+    <Project Path="src/Memshare.Merge/Memshare.Merge.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Memshare.Tests/Memshare.Tests.csproj" />
+  </Folder>
+</Solution>

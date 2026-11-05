@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Unit and integration tests. Integration tests work on real Git repositories in a temporary
+    directory: one bare repository is the remote, and each clone of it acts as one machine.
+  -->
+  <PropertyGroup>
+    <RootNamespace>Memshare.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Memshare.Core\Memshare.Core.csproj" />
+    <!-- The CLI, so that git can run the real merge driver in integration tests. -->
+    <ProjectReference Include="..\..\src\Memshare.Cli\Memshare.Cli.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- MEMORY.md: the index format, its three-way merge (ADR-0005) and its checks. No dependencies. -->
+  <PropertyGroup>
+    <RootNamespace>Memshare.Merge</RootNamespace>
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Memshare.Tests" />
+  </ItemGroup>
+
+</Project>

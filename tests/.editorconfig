@@ -1,0 +1,10 @@
+# Test-specific analyzer relaxations.
+[*.cs]
+# Test method names are sentences with underscores.
+dotnet_diagnostic.CA1707.severity = none
+# xUnit recommends not using ConfigureAwait(false) in tests (xUnit1030).
+dotnet_diagnostic.CA2007.severity = none
+# Test classes are discovered by reflection and need not be internal.
+dotnet_diagnostic.CA1515.severity = none
+# Literal strings in tests are fine.
+dotnet_diagnostic.CA1303.severity = none
