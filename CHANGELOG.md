@@ -3,7 +3,12 @@
 All notable changes are listed here. Versions follow [Semantic Versioning](https://semver.org); before
 1.0, a minor version may change behaviour or file formats, and says so.
 
-## 0.1.0 (unreleased)
+## 0.1.1 (unreleased)
+
+- Windows install script: puts the install directory on the PATH before running `memshare install`,
+  which no longer reports it as missing just before the script adds it.
+
+## 0.1.0 (2026-11-05)
 
 First release.
 

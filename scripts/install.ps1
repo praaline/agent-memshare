@@ -43,16 +43,23 @@ try {
     Write-Host 'checksum ok'
 
     Expand-Archive -Path (Join-Path $tmp $asset) -DestinationPath (Join-Path $tmp 'package')
+
+    # This script puts the install directory on the PATH: on this session's PATH before running
+    # `memshare install` (so that it does not report the directory as missing), on the user's
+    # PATH once the install has succeeded.
+    $bin = Join-Path $env:LOCALAPPDATA 'Programs\memshare'
+    if (-not (($env:Path -split ';') -contains $bin)) { $env:Path = ($env:Path.TrimEnd(';') + ";$bin").TrimStart(';') }
+
     $arguments = @('install', '--machine', $Machine)
     if ($StoresRoot) { $arguments += @('--stores-root', $StoresRoot) }
     & (Join-Path $tmp 'package\memshare.exe') @arguments
     if ($LASTEXITCODE -ne 0) { throw "memshare install failed ($LASTEXITCODE)" }
 
-    $bin = Join-Path $env:LOCALAPPDATA 'Programs\memshare'
     $userPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+    if (-not $userPath) { $userPath = '' }
     if (-not (($userPath -split ';') -contains $bin)) {
         [Environment]::SetEnvironmentVariable('Path', ($userPath.TrimEnd(';') + ";$bin").TrimStart(';'), 'User')
-        Write-Host "added $bin to your PATH (open a new terminal to use memshare)"
+        Write-Host "added $bin to your user PATH (terminals opened before this one need a restart to see it)"
     }
 }
 finally {
