@@ -29,7 +29,11 @@ internal static class SetupCommands
 
             await Console.Out.WriteLineAsync(result.Changes.Count == 0 ? "already installed, nothing changed." : $"installed {DisplayPath.Of(result.ExecutablePath)}.")
                 .ConfigureAwait(false);
-            await Console.Out.WriteLineAsync("Next: memshare store add <url>, then memshare link <slug> in a project.").ConfigureAwait(false);
+            if (result.StoreCount == 0)
+            {
+                await Console.Out.WriteLineAsync("Next: memshare store add <url>, then memshare link <slug> in a project.").ConfigureAwait(false);
+            }
+
             return 0;
         });
         return command;

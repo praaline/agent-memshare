@@ -12,7 +12,8 @@ namespace Memshare.Installation;
 /// <param name="ExecutablePath">Where the executable is installed.</param>
 /// <param name="Changes">What changed on the machine.</param>
 /// <param name="Warnings">What the user should know or do.</param>
-public sealed record InstallResult(string ExecutablePath, IReadOnlyList<string> Changes, IReadOnlyList<string> Warnings);
+/// <param name="StoreCount">How many stores the machine has under its stores root.</param>
+public sealed record InstallResult(string ExecutablePath, IReadOnlyList<string> Changes, IReadOnlyList<string> Warnings, int StoreCount);
 
 /// <summary>
 /// <c>memshare install</c> and <c>uninstall</c>: sets up a machine (ADR-0007). Idempotent: running it
@@ -99,7 +100,7 @@ public sealed partial class Installer(MemshareEnvironment environment, GitRunner
             warnings.Add($"{DisplayPath.Of(environment.InstallDirectory)} is not on your PATH: add it to run `memshare` by name (the agent's hook uses the full path and works anyway).");
         }
 
-        return new InstallResult(InstalledExecutable, changes, warnings);
+        return new InstallResult(InstalledExecutable, changes, warnings, context.Stores.Stores.Count);
     }
 
     /// <summary>Removes the agents' hook, rule and instructions block. Stores, keys, configuration and the executable stay.</summary>

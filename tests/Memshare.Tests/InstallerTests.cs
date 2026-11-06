@@ -47,6 +47,21 @@ public sealed class InstallerTests
         Assert.Equal("memshare build 2", File.ReadAllText(installer.InstalledExecutable));
     }
 
+    [Fact]
+    public async Task The_result_counts_the_stores_so_a_new_machine_is_told_to_add_one()
+    {
+        using var sandbox = new Sandbox();
+        var laptop = await Machine.CloneAsync(sandbox, await StoreRemote.CreateAsync(sandbox), "laptop");
+        Installed.ClaudeDirectory(laptop);
+        var installer = Installed.Installer(laptop);
+
+        var withStore = await installer.InstallAsync("laptop", laptop.StoresRoot, Installed.FakeExecutable(sandbox), TestContext.Current.CancellationToken);
+        var withoutStore = await installer.InstallAsync("laptop", laptop.StoresRoot + "-empty", Installed.FakeExecutable(sandbox), TestContext.Current.CancellationToken);
+
+        Assert.Equal(1, withStore.StoreCount);
+        Assert.Equal(0, withoutStore.StoreCount);
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("My Laptop")]

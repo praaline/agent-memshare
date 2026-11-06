@@ -3,6 +3,11 @@
 All notable changes are listed here. Versions follow [Semantic Versioning](https://semver.org); before
 1.0, a minor version may change behaviour or file formats, and says so.
 
+## Unreleased
+
+- `memshare install` suggests `memshare store add` only when the machine has no store yet (not
+  after every update).
+
 ## 0.1.1 (2026-11-06)
 
 - Windows install script: puts the install directory on the PATH before running `memshare install`,
